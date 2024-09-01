@@ -7,5 +7,7 @@
         Task<Staff> AddStaffAsync(Staff staff);
         Task<Staff?> UpdateStaffAsync(Staff staff);
         Task<bool> DeleteStaffAsync(int id);
+
+        Task<Staff> GetStaffByEmployeeCodeAsync(string employeeCode);
     }
 }
