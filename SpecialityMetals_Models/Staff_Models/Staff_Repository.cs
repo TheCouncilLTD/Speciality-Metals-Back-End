@@ -60,5 +60,9 @@ namespace Speciality_Metals_Back_End.SpecialityMetals_Models.Staff_Models
 
             return true;
         }
+        public async Task<Staff> GetStaffByEmployeeCodeAsync(string employeeCode)
+        {
+            return await _context.Staff.FirstOrDefaultAsync(s => s.Employee_Code == employeeCode);
+        }
     }
 }

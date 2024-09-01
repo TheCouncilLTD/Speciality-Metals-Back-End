@@ -74,5 +74,26 @@ namespace Speciality_Metals_Back_End.Controllers
 
             return NoContent();
         }
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+        {
+            var staff = await _repository.GetStaffByEmployeeCodeAsync(loginDto.EmployeeCode);
+
+            if (staff == null)
+            {
+                return Unauthorized("Invalid Employee Code.");
+            }
+
+            // Here, you might want to generate a token or set a session, etc.
+            // For now, we just return a successful message.
+
+            return Ok(new { message = "Login successful!", staff });
+        }
+    }
+
+    public class LoginDto
+    {
+        public string EmployeeCode { get; set; }
     }
 }
+
