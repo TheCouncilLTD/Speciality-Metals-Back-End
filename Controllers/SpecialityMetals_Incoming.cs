@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Speciality_Metals_Back_End.SpecialityMetals_Models.Incoming_Models;
 
 namespace Speciality_Metals_Back_End.Controllers
@@ -48,9 +49,41 @@ namespace Speciality_Metals_Back_End.Controllers
                 return BadRequest("Incoming ID mismatch");
             }
 
-            var updatedIncoming = await _incomingRepository.UpdateIncomingAsync(incoming);
-            return Ok(updatedIncoming);
+            // Check if the incoming entity exists before updating
+            var existingIncoming = await _incomingRepository.GetIncomingByIdAsync(id);
+            if (existingIncoming == null)
+            {
+                return NotFound("Incoming entity not found");
+            }
+
+            // Update the existing entity's properties
+            existingIncoming.Incoming_Date = incoming.Incoming_Date;
+            existingIncoming.Gross_Weight = incoming.Gross_Weight;
+            existingIncoming.Tare_Weight = incoming.Tare_Weight;
+            existingIncoming.Net_Weight = incoming.Net_Weight;
+            existingIncoming.GRV_Number = incoming.GRV_Number;
+            existingIncoming.SupplierID = incoming.SupplierID;
+            existingIncoming.ProductID = incoming.ProductID;
+
+            try
+            {
+                // Pass the updated entity to the repository's update method
+                var updatedIncoming = await _incomingRepository.UpdateIncomingAsync(existingIncoming);
+                return Ok(updatedIncoming);
+            }
+            catch (DbUpdateException ex)
+            {
+                // Handle any database-related errors
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error updating data: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                // Handle any other errors
+                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred: " + ex.Message);
+            }
         }
+
+
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteIncoming(int id)
