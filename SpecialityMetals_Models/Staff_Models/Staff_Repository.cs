@@ -64,5 +64,15 @@ namespace Speciality_Metals_Back_End.SpecialityMetals_Models.Staff_Models
         {
             return await _context.Staff.FirstOrDefaultAsync(s => s.Employee_Code == employeeCode);
         }
+
+        public async Task<string?> GetEmployeeTypeNameByStaffIdAsync(int staffId)
+        {
+            var query = from staff in _context.Staff
+                        join employeeType in _context.Employee_Type on staff.Employee_Type_ID equals employeeType.Employee_Type_ID
+                        where staff.StaffID == staffId
+                        select employeeType.Employee_Type_Name;
+
+            return await query.FirstOrDefaultAsync();
+        }
     }
 }
