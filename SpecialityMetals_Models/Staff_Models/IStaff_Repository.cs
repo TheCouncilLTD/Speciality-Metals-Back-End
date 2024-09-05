@@ -9,5 +9,7 @@
         Task<bool> DeleteStaffAsync(int id);
 
         Task<Staff> GetStaffByEmployeeCodeAsync(string employeeCode);
+
+        Task<string?> GetEmployeeTypeNameByStaffIdAsync(int staffId);
     }
 }

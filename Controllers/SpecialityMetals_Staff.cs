@@ -89,6 +89,18 @@ namespace Speciality_Metals_Back_End.Controllers
 
             return Ok(new { message = "Login successful!", staff });
         }
+        [HttpGet("{staffId}/employeeTypeName")]
+        public async Task<ActionResult<string?>> GetEmployeeTypeNameByStaffId(int staffId)
+        {
+            var employeeTypeName = await _repository.GetEmployeeTypeNameByStaffIdAsync(staffId);
+            if (employeeTypeName == null)
+            {
+                return NotFound("Employee type not found.");
+            }
+
+            return Ok(employeeTypeName);
+        }
+
     }
 
     public class LoginDto
