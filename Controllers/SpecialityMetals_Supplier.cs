@@ -63,5 +63,17 @@ namespace Speciality_Metals_Back_End.Controllers
 
             return NoContent();
         }
-    }
+        [HttpGet("{supplierId}/productName")]
+        public async Task<ActionResult<string?>> GetProductNameBySupplierId(int supplierId)
+        {
+            var productName = await _supplierRepository.GetProductNameBySupplierIdAsync(supplierId);
+            if (productName == null)
+            {
+                return NotFound("Product not found.");
+            }
+
+            return Ok(productName);
+        }
+    
+}
 }
