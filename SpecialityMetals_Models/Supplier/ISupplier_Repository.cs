@@ -7,5 +7,10 @@
         Task<Supplier> AddSupplierAsync(Supplier supplier);
         Task<Supplier> UpdateSupplierAsync(Supplier supplier);
         Task<bool> DeleteSupplierAsync(int supplierId);
+
+
+
+
+        Task<string?> GetProductNameBySupplierIdAsync(int supplierId);
     }
 }

@@ -47,5 +47,14 @@ namespace Speciality_Metals_Back_End.SpecialityMetals_Models.Supplier
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<string?> GetProductNameBySupplierIdAsync(int supplierId)
+        {
+            var query = from supplier in _context.Supplier
+                        join product in _context.Product on supplier.ProductID equals product.ProductID
+                        where supplier.SupplierID == supplierId
+                        select product.Product_Name;
+
+            return await query.FirstOrDefaultAsync();
+        }
     }
 }
