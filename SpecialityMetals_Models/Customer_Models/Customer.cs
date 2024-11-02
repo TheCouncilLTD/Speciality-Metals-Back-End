@@ -11,7 +11,7 @@ namespace Speciality_Metals_Back_End.SpecialityMetals_Models.Customer_Models
 
         public string? Phone_number { get; set; }
 
-
+        public string? Customer_Code { get; set; }
 
     }
 }
