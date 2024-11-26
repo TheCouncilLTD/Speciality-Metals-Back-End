@@ -14,10 +14,10 @@ namespace Speciality_Metals_Back_End.SpecialityMetals_Models.Sundry
 
         public int? Tare_Weight { get; set; }
         public int? Net_Weight { get; set; }
-        public int? SupplierID { get; set; }
 
         public int? ProductID { get; set; }
-
+        public string? Comments { get; set; }
+        public string? Sundry_Notes_ID { get; set; }
     }
 }
 
