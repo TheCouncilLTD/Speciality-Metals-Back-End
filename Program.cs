@@ -7,7 +7,7 @@ using Speciality_Metals_Back_End.SpecialityMetals_Models.Product_Models;
 using Speciality_Metals_Back_End.SpecialityMetals_Models.Staff_Models;
 using Speciality_Metals_Back_End.SpecialityMetals_Models.Sundry;
 using Speciality_Metals_Back_End.SpecialityMetals_Models.Supplier;
-
+using Speciality_Metals_Back_End.SpecialityMetals_Models.Sundry_Notes_Models;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
@@ -48,6 +48,9 @@ builder.Services.AddScoped<IOutgoing_Repository, Outgoing_Repository>();
 
 builder.Services.AddDbContext<Incoming_Context>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IIncoming_Repository, IncomingRepository>();
+    
+builder.Services.AddDbContext<Sundry_Notes_Context>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<iSundry_Notes_Repository, Sundry_Notes_Repository>();
 
 var app = builder.Build();
 
