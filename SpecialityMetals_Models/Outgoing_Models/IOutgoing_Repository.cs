@@ -1,4 +1,4 @@
-﻿namespace Speciality_Metals_Back_End.SpecialityMetals_Models.Outgoing
+﻿namespace Speciality_Metals_Back_End.SpecialityMetals_Models.Outgoing_Models
 {
     public interface IOutgoing_Repository
     {

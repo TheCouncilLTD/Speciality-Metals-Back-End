@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Speciality_Metals_Back_End.SpecialityMetals_Models.Outgoing
+namespace Speciality_Metals_Back_End.SpecialityMetals_Models.Outgoing_Models
 {
     public class Outgoing
     {
