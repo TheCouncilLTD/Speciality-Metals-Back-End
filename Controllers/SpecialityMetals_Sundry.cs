@@ -43,13 +43,26 @@ namespace Speciality_Metals_Back_End.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<Sundry>> UpdateSundry(int id, Sundry sundry)
         {
-            if (id != sundry.SundryID)
+            try
             {
-                return BadRequest("Sundry ID mismatch");
-            }
+                if (id != sundry.SundryID)
+                {
+                    return BadRequest("Sundry ID mismatch");
+                }
 
-            var updatedSundry = await _sundryRepository.UpdateSundryAsync(sundry);
-            return Ok(updatedSundry);
+                var updatedSundry = await _sundryRepository.UpdateSundryAsync(sundry);
+                if (updatedSundry == null)
+                {
+                    return NotFound($"Sundry with ID {id} not found");
+                }
+
+                return Ok(updatedSundry);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception here
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]

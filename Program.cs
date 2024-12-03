@@ -8,6 +8,11 @@ using Speciality_Metals_Back_End.SpecialityMetals_Models.Staff_Models;
 using Speciality_Metals_Back_End.SpecialityMetals_Models.Sundry;
 using Speciality_Metals_Back_End.SpecialityMetals_Models.Supplier;
 using Speciality_Metals_Back_End.SpecialityMetals_Models.Sundry_Notes_Models;
+using Speciality_Metals_Back_End.SpecialityMetals_Models.JWT;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
@@ -19,12 +24,14 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader());
 });
 
+// Add services to the container
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+// Learn more about configuring Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Registering the DbContexts and corresponding Repositories
+// Register DbContexts and Repositories
 builder.Services.AddDbContext<Employee_Type_Context>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IEmployee_Type_Repository, Employee_Type_Repository>();
 
@@ -48,13 +55,42 @@ builder.Services.AddScoped<IOutgoing_Repository, Outgoing_Repository>();
 
 builder.Services.AddDbContext<Incoming_Context>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IIncoming_Repository, IncomingRepository>();
-    
+
 builder.Services.AddDbContext<Sundry_Notes_Context>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<iSundry_Notes_Repository, Sundry_Notes_Repository>();
 
+// Configure JWT settings
+var jwtSettingsSection = builder.Configuration.GetSection("JWTSettings"); // Matches the config key
+builder.Services.Configure<JWTSettings>(jwtSettingsSection);
+
+var jwtSettings = jwtSettingsSection.Get<JWTSettings>();
+var key = Encoding.UTF8.GetBytes(jwtSettings.Key);
+
+// Add authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings.Issuer,
+        ValidAudience = jwtSettings.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(key)
+    };
+});
+builder.Services.AddScoped<JwtHelper>();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -63,6 +99,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("AllowAngularApp");
+
+app.UseAuthentication(); // Add authentication middleware
 app.UseAuthorization();
 
 app.MapControllers();

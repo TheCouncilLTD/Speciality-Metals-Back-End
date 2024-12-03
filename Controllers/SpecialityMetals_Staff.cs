@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Speciality_Metals_Back_End.SpecialityMetals_Models.JWT;
 using Speciality_Metals_Back_End.SpecialityMetals_Models.Staff_Models;
 
 namespace Speciality_Metals_Back_End.Controllers
@@ -9,10 +11,18 @@ namespace Speciality_Metals_Back_End.Controllers
     public class SpecialityMetals_Staff : ControllerBase
     {
         private readonly IStaff_Repository _repository;
-
-        public SpecialityMetals_Staff(IStaff_Repository repository)
+        private readonly JwtHelper _jwtHelper;
+        public SpecialityMetals_Staff(IStaff_Repository repository, JwtHelper jwtHelper)
         {
             _repository = repository;
+            _jwtHelper = jwtHelper;
+        }
+
+        [Authorize]
+        [HttpGet("secure-data")]
+        public IActionResult GetSecureData()
+        {
+            return Ok("This is secure data only accessible with a valid token!");
         }
 
         // GET: api/SpecialityMetals_Staff
@@ -84,10 +94,10 @@ namespace Speciality_Metals_Back_End.Controllers
                 return Unauthorized("Invalid Employee Code.");
             }
 
-            // Here, you might want to generate a token or set a session, etc.
-            // For now, we just return a successful message.
+            // Assuming you have injected JwtHelper into this controller
+            var jwtToken = _jwtHelper.GenerateJwtToken(loginDto.EmployeeCode);  // Correct method name
 
-            return Ok(new { message = "Login successful!", staff });
+            return Ok(new { message = "Login successful!", token = jwtToken });
         }
         [HttpGet("{staffId}/employeeTypeName")]
         public async Task<ActionResult<string?>> GetEmployeeTypeNameByStaffId(int staffId)
