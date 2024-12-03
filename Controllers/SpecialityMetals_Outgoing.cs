@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Speciality_Metals_Back_End.SpecialityMetals_Models.Outgoing;
+using Speciality_Metals_Back_End.SpecialityMetals_Models.Outgoing_Models;
 
 namespace Speciality_Metals_Back_End.Controllers
 {

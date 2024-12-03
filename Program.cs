@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Speciality_Metals_Back_End.SpecialityMetals_Models.Customer_Models;
 using Speciality_Metals_Back_End.SpecialityMetals_Models.EmployeeType_Models;
 using Speciality_Metals_Back_End.SpecialityMetals_Models.Incoming_Models;
-using Speciality_Metals_Back_End.SpecialityMetals_Models.Outgoing;
+using Speciality_Metals_Back_End.SpecialityMetals_Models.Outgoing_Models;
 using Speciality_Metals_Back_End.SpecialityMetals_Models.Product_Models;
 using Speciality_Metals_Back_End.SpecialityMetals_Models.Staff_Models;
 using Speciality_Metals_Back_End.SpecialityMetals_Models.Sundry;
@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Speciality_Metals_Back_End.SpecialityMetals_Models.ReportingCustomer;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
@@ -58,6 +60,11 @@ builder.Services.AddScoped<IIncoming_Repository, IncomingRepository>();
 
 builder.Services.AddDbContext<Sundry_Notes_Context>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<iSundry_Notes_Repository, Sundry_Notes_Repository>();
+
+
+builder.Services.AddDbContext<ReportCust_Context>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IReportCust_Repository, ReportCust_Repository>();
+
 
 // Configure JWT settings
 var jwtSettingsSection = builder.Configuration.GetSection("JWTSettings"); // Matches the config key
