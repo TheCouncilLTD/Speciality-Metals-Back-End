@@ -4,6 +4,6 @@
     {
         public string CustomerName { get; set; }
         public string DeliveryNote { get; set; }
-        public DateTime Outgoing_Date { get; set; }
+        public DateTime OutgoingDate { get; set; }
     }
 }
