@@ -40,7 +40,7 @@ namespace Speciality_Metals_Back_End.SpecialityMetals_Models.ReportingCustomer
                                               {
                                                   CustomerName = customer.Customer_Name,
                                                   DeliveryNote = o.Del_Note,
-                                                  Outgoing_Date = (DateTime)o.Outgoing_Date
+                                                  OutgoingDate = (DateTime)o.Outgoing_Date
                                               })
                                               .ToListAsync();
 

@@ -15,6 +15,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Speciality_Metals_Back_End.SpecialityMetals_Models.ReportingCustomer;
 using Speciality_Metals_Back_End.SpecialityMetals_Models.ReportingProduct;
+using Speciality_Metals_Back_End.SpecialityMetals_Models.AllDeliveriesWeighed;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +69,9 @@ builder.Services.AddScoped<IReportCust_Repository, ReportCust_Repository>();
 
 builder.Services.AddDbContext<ReportProduct_Context>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IReportProduct_Repository, ReportProduct_Repository>();
+
+builder.Services.AddDbContext<AllDeliveriesWeighedContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IAllDeliveriesWeighedRepository, AllDeliveriesWeighedRepository>();
 
 
 // Configure JWT settings
