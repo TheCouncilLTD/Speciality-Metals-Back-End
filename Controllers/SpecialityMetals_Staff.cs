@@ -88,16 +88,19 @@ namespace Speciality_Metals_Back_End.Controllers
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
             var staff = await _repository.GetStaffByEmployeeCodeAsync(loginDto.EmployeeCode);
-
             if (staff == null)
             {
                 return Unauthorized("Invalid Employee Code.");
             }
 
-            // Assuming you have injected JwtHelper into this controller
-            var jwtToken = _jwtHelper.GenerateJwtToken(loginDto.EmployeeCode);  // Correct method name
+            var jwtToken = _jwtHelper.GenerateJwtToken(loginDto.EmployeeCode);
 
-            return Ok(new { message = "Login successful!", token = jwtToken });
+            return Ok(new
+            {
+                message = "Login successful!",
+                token = jwtToken,
+                staff = staff
+            });
         }
         [HttpGet("{staffId}/employeeTypeName")]
         public async Task<ActionResult<string?>> GetEmployeeTypeNameByStaffId(int staffId)
