@@ -9,7 +9,7 @@ namespace Speciality_Metals_Back_End.SpecialityMetals_Models.Sundry
         public int SundryID { get; set; }
 
         public DateTime? Sundry_Date { get; set; }
-
+        public TimeSpan Time { get; set; }  // Add this
         public int? Gross_Weight { get; set; }
 
         public int? Tare_Weight { get; set; }
