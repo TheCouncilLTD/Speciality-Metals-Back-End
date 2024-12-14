@@ -61,9 +61,12 @@ namespace Speciality_Metals_Back_End.Controllers
             existingIncoming.Gross_Weight = incoming.Gross_Weight;
             existingIncoming.Tare_Weight = incoming.Tare_Weight;
             existingIncoming.Net_Weight = incoming.Net_Weight;
-            existingIncoming.GRV_Number = incoming.GRV_Number;
+            existingIncoming.GRV_ID = incoming.GRV_ID;
             existingIncoming.SupplierID = incoming.SupplierID;
             existingIncoming.ProductID = incoming.ProductID;
+            existingIncoming.EmployeeID = incoming.EmployeeID;
+            existingIncoming.comments = incoming.comments;
+            existingIncoming.Sundry_Note_ID = incoming.Sundry_Note_ID;
 
             try
             {
@@ -82,8 +85,6 @@ namespace Speciality_Metals_Back_End.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred: " + ex.Message);
             }
         }
-
-
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteIncoming(int id)

@@ -17,6 +17,7 @@ using Speciality_Metals_Back_End.SpecialityMetals_Models.ReportingCustomer;
 using Speciality_Metals_Back_End.SpecialityMetals_Models.ReportingProduct;
 using Speciality_Metals_Back_End.SpecialityMetals_Models.AllDeliveriesWeighed;
 using Speciality_Metals_Back_End.SpecialityMetals_Models.AllOutgoingDeliveriesWeighed;
+using Speciality_Metals_Back_End.SpecialityMetals_Models.GRV;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -77,6 +78,8 @@ builder.Services.AddScoped<IAllDeliveriesWeighedRepository, AllDeliveriesWeighed
 builder.Services.AddDbContext<AllOutGoingWeight_Context>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IAllOutGoingWeight_Repository, AllOutGoingWeight_Repository>();
 
+builder.Services.AddDbContext<GRVDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IGRVRepository, GRVRepository>();
 
 // Configure JWT settings
 var jwtSettingsSection = builder.Configuration.GetSection("JWTSettings"); // Matches the config key
