@@ -21,7 +21,7 @@ namespace Speciality_Metals_Back_End.SpecialityMetals_Models.Incoming_Models
         public int? EmployeeID { get; set; }
         public int? GRV_ID { get; set; }
         public string? comments { get; set; }
-        public int Sundry_Note_ID { get; set; }
+        public int? Sundry_Note_ID { get; set; }
 
     }
 }

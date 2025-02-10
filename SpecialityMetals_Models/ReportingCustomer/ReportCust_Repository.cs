@@ -25,24 +25,27 @@ namespace Speciality_Metals_Back_End.SpecialityMetals_Models.ReportingCustomer
         {
             // Step 1: Get the customerId from the Customer table based on customerName
             var customer = await _customerContext.Customer
-                                                  .Where(c => c.Customer_Name.ToLower() == customerName.ToLower())
-                                                  .FirstOrDefaultAsync();
-
+                                               .Where(c => c.Customer_Name.ToLower() == customerName.ToLower())
+                                               .FirstOrDefaultAsync();
             if (customer == null)
             {
-                return null; // Return null if no customer found
+                return null;
             }
 
-            // Step 2: Get delivery notes from the Outgoing table using the customerId
+            // Step 2: Get delivery notes from the Outgoing table and join with Sundry_Note
             var deliveryNotes = await _context.Outgoing
-                                              .Where(o => o.CustomerID == customer.CustomerID)
-                                              .Select(o => new ReportCust
-                                              {
-                                                  CustomerName = customer.Customer_Name,
-                                                  DeliveryNote = o.Del_Note,
-                                                  OutgoingDate = (DateTime)o.Outgoing_Date
-                                              })
-                                              .ToListAsync();
+                .Where(o => o.CustomerID == customer.CustomerID)
+                .Select(o => new ReportCust
+                {
+                    CustomerName = customer.Customer_Name,
+                    DeliveryNote = o.Sundry_Note_ID.HasValue ?
+                        _context.Sundry_Note
+                            .Where(sn => sn.Sundry_Notes_ID == o.Sundry_Note_ID)
+                            .Select(sn => sn.Sundry_Note)
+                            .FirstOrDefault() ?? "" : "",
+                    OutgoingDate = o.Outgoing_Date ?? DateTime.MinValue
+                })
+                .ToListAsync();
 
             return deliveryNotes;
         }

@@ -16,8 +16,8 @@ namespace Speciality_Metals_Back_End.SpecialityMetals_Models.ReportingProduct
         {
             // Step 1: Get the productId from the Product table based on productName
             var product = await _context.Product
-                                        .Where(p => p.Product_Name.ToLower() == productName.ToLower())
-                                        .FirstOrDefaultAsync();
+                                      .Where(p => p.Product_Name.ToLower() == productName.ToLower())
+                                      .FirstOrDefaultAsync();
 
             if (product == null)
             {
@@ -25,15 +25,21 @@ namespace Speciality_Metals_Back_End.SpecialityMetals_Models.ReportingProduct
             }
 
             // Step 2: Get delivery notes from the Outgoing table using the productId
+            // Join with Sundry_Note table to get the actual note text
             var deliveryNotes = await _context.Outgoing
-                                              .Where(o => o.ProductID == product.ProductID)
-                                              .Select(o => new ReportProduct
-                                              {
-                                                  Product_Name = product.Product_Name,
-                                                  DeliveryNote = o.Del_Note,
-                                                  OutgoingDate = o.Outgoing_Date.Value // Ensure non-nullable
-                                              })
-                                              .ToListAsync();
+                                            .Where(o => o.ProductID == product.ProductID)
+                                            .Join(
+                                                _context.Sundry_Note,
+                                                outgoing => outgoing.Sundry_Note_ID,
+                                                sundryNote => sundryNote.Sundry_Notes_ID,
+                                                (outgoing, sundryNote) => new ReportProduct
+                                                {
+                                                    Product_Name = product.Product_Name,
+                                                    DeliveryNote = sundryNote.Sundry_Note, // Using the actual note text
+                                                    OutgoingDate = outgoing.Outgoing_Date.Value
+                                                }
+                                            )
+                                            .ToListAsync();
 
             return deliveryNotes;
         }
